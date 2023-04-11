@@ -1,0 +1,19 @@
+{
+  "name": "gruppeoppgave-eksamentrening-ustyr",
+  "version": "1.0.0",
+  "description": "Lager et lager-system for en skole med et rekke ustyr.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thomag05/Gruppeoppgave-Ekstamenstrening-Utsyr.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thomag05/Gruppeoppgave-Ekstamenstrening-Utsyr/issues"
+  },
+  "homepage": "https://github.com/thomag05/Gruppeoppgave-Ekstamenstrening-Utsyr#readme"
+}
