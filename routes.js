@@ -1,5 +1,8 @@
 module.exports = function(app){
 
 
-    //sett inn ruter her
+    app.get("/", (req, res) => {
+        res.render("index.html")
+    })
+
 }
