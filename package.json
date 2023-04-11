@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/thomag05/Gruppeoppgave-Ekstamenstrening-Utsyr/issues"
   },
-  "homepage": "https://github.com/thomag05/Gruppeoppgave-Ekstamenstrening-Utsyr#readme"
+  "homepage": "https://github.com/thomag05/Gruppeoppgave-Ekstamenstrening-Utsyr#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "hbs": "^4.2.0",
+    "path": "^0.12.7"
+  }
 }
