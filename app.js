@@ -16,7 +16,7 @@ require('./routes')(app);
 require('dotenv').config();
 
 app.use(session({
-     secret: /*process.env.secret*/ "a",
+     secret: process.env.secret,
     resave: false,
     saveUninitialized: false
 }))
