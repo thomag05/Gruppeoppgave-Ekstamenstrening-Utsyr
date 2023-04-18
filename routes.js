@@ -1,5 +1,7 @@
 module.exports = function(app){
 
+const db = require("better-sqlite3")("Gruppeoppgave-eksamenstreningDB.sdb");
+
 app.get("/", (req, res) => {
     res.render("index.html")
 })
@@ -31,18 +33,33 @@ app.post("/logout", (req, res) => {
 })
 
 app.get("/admin", (req,res)=>{
-    if(req.session.loggedin && req.session.isAdmin){
-        users = db.prepare("select * from user");
+    //if(req.session.loggedin && req.session.isAdmin){
+        users = db.prepare("select * from user").all();
         device = db.prepare(`SELECT device.*, (SELECT count(*) FROM reservastion where reservastion.device_id = device.id and reservastion.accepted=false) as unaprovedreservations, deviceType.*
-        FROM device inner join deviceType on device.deviceType_id = deviceType.id;`);
+        FROM device inner join deviceType on device.deviceType_id = deviceType.id;`).all();
+        utstyrType = db.prepare("select * from deviceType").all();
         res.render("adminside.hbs", {
             user: users,
-            device: device
+            device: device,
+            utstyrType: utstyrType
         });
-    }else{
-        res.redirect("back")
-    }
+    //}else{
+      //res.redirect("back")
+    //}
 
+});
+
+app.post("/registrerUtstyr", (req,res)=>{
+  svar=req.body
+  db.prepare(`INSERT INTO device (Name,deviceType_id)
+  VALUES (?,?);`).run(svar.utstyrNavn, svar.utstyrType)
+  res.redirect("/admin")
+})
+app.post("/registrerUtstyrType", (req,res)=>{
+  svar=req.body
+  db.prepare(`INSERT INTO deviceType (name,imgPath,beskrivelse)
+  VALUES (?,?,?);`).run(svar.TypeNavn, svar.BildePath, svar.beskrivelse)
+  res.redirect("/admin")
 });
 
 }
