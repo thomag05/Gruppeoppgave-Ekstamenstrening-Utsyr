@@ -4,9 +4,7 @@ app.get("/", (req, res) => {
     res.render("index.html")
 })
 
-
-
-app.get("nybruker", (req, res) => {
+app.get("/login", (req, res) => {
     res.render("login.hbs")
 })
     

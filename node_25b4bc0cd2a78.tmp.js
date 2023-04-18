@@ -7,7 +7,7 @@ const db = require("better-sqlite3")("Gruppeoppgave-eksamenstreningDB.sdb");
 
 const app = express();
 const rootpath = path.join(__dirname, "public")
-const hbspath = path.join(__dirname, "views")
+const hbspath = path.join(__dirname, "views/pages")
 app.use(express.static(rootpath));
 app.set("view engine", hbs);
 app.set("views", hbspath)
