@@ -4,9 +4,37 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
     <title>Admin</title>
 </head>
 <body>
+    <form id="registrerUtstyr" method="post" action="/registrerUtstyr" class="GL2">
+        <h2>Registrer nytt utstyr</h2>
+        <label for="utstyrNavn">Navn</label><br>
+        <input id="utstyrNavn" name="utstyrNavn" placeholder="Navn på utstyr"><br><br>
+
+        <label for="utstyrType"></label><br>
+        <select name="utstyrType">
+            {{#each utstyrType}}
+                <option value="{{this.id}}">{{this.name}}</option>
+            {{/each}}
+        </select><br><br>
+        <input type="submit" value="Legg til">
+    </form>
+    <form id="registrerUtstyrType" method="post" action="/registrerUtstyrType" class="GR2">
+        <h2>Registrer en ny type utstyr</h2>
+        <label for="TypeNavn">Navn</label><br>
+        <input type="text" name="TypeNavn" placeholder="navn"><br><br>
+
+         <label for="BildePath">Bilde Path</label><br>
+        <input type="text" name="BildePath" placeholder="/images/example.png"><br>
+    
+        
+         <label for="beskrivelse">Bilde Path</label><br>
+        <textarea name="beskrivelse" form="registrerUtstyrType" id="" cols="30" rows="10" placeholder="Beskrivelse"></textarea><br><br>
+        <input type="submit" value="Legg til">
+    </form>
+
     {{#each user}}
         <div>
             <h1>{{this.username}}</h1>
@@ -20,7 +48,11 @@
     {{/each}}
 
     {{#each device}}
-        
+        <div>
+            <h1>{{this.Name}}</h1>
+            <h3>{{this.name}}</h3>
+            <p>usvarte forespørsler: <div>{{this.unaprovedreservations}}</div></p>
+        </div>
     {{/each}}
 </body>
 </html>

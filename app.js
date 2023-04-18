@@ -5,6 +5,7 @@ const hbs = require("hbs");
 const db = require("better-sqlite3")("Gruppeoppgave-eksamenstreningDB.sdb");
 
 const app = express();
+app.use(express.urlencoded({extended: true}));
 const rootpath = path.join(__dirname, "public")
 const hbspath = path.join(__dirname, "views/pages")
 app.use(express.static(rootpath));
@@ -15,7 +16,7 @@ require('./routes')(app);
 require('dotenv').config();
 
 app.use(session({
-     secret: process.env.secret,
+     secret: /*process.env.secret*/ "a",
     resave: false,
     saveUninitialized: false
 }))
