@@ -5,16 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrering</title>
-    <link rel="stylesheet" href="css/loginregistrerslett.css">
+    <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
 <h1>Registrer ny bruker</h1>
-    <form action="/addUser" method="post">
+    <form action="/addUser" method="POST">
         <label for="name">Username: </label><input type="text" name="name" required><br>
         <label for="email">Email: </label><input type="email" name="email" required><br>
         <label for="password">Password: </label><input type="password" name="password" required><br>
         <button>Registrer ny bruker</button>
     </form>
- <form action="/"><button>Gå til login</button></form>
+ <form action="/login"><button>Gå til login</button></form>
 </body>
 </html>
