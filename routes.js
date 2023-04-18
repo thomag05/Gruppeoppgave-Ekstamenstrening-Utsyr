@@ -30,4 +30,19 @@ app.post("/logout", (req, res) => {
     res.redirect("back")
 })
 
+app.get("/admin", (req,res)=>{
+    if(req.session.loggedin && req.session.isAdmin){
+        users = db.prepare("select * from user");
+        device = db.prepare(`SELECT device.*, (SELECT count(*) FROM reservastion where reservastion.device_id = device.id and reservastion.accepted=false) as unaprovedreservations, deviceType.*
+        FROM device inner join deviceType on device.deviceType_id = deviceType.id;`);
+        res.render("adminside.hbs", {
+            user: users,
+            device: device
+        });
+    }else{
+        res.redirect("back")
+    }
+
+});
+
 }
