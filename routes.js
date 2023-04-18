@@ -5,6 +5,11 @@ module.exports = function(app){
     //     res.render("index.html")
     // })
 
+
+
+app.get("nybruker", (req, res) => {
+    res.render("login.hbs")
+})
     
 app.post("/login", async (req, res) => {
     try {
@@ -22,5 +27,10 @@ app.post("/login", async (req, res) => {
         res.send('<html><body><script>alert("Du har tastet inn feil brukernavn eller passord");window.location.href="/";</script></body></html>');
     }
   });
+
+app.post("/logout", (req, res) => {
+    req.session.destroy();
+    res.redirect("back")
+})
 
 }
