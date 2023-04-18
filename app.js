@@ -10,6 +10,13 @@ const rootpath = path.join(__dirname, "public")
 const hbspath = path.join(__dirname, "views")
 
 require('./routes')(app);
+require('dotenv').config();
+
+app.use(session({
+    secret: process.env.secret,
+    resave: false,
+    saveUninitialized: false
+}))
 
 app.listen("3000", () => {
     console.log("Server listening at http://localhost:3000")
