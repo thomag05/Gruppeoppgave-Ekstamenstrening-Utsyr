@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+</head>
+<body>
+    {{#each user}}
+        <div>
+            <h1>{{this.username}}</h1>
+            <h4>Tillgengsnivå</h4>
+            <select>
+                <option value="1">Elev</option>
+                <option value="2">Lærer</option>
+                <option value="3">Administrator</option>
+            </select>
+        </div>
+    {{/each}}
+
+    {{#each device}}
+        
+    {{/each}}
+</body>
+</html>
