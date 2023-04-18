@@ -1,3 +1,5 @@
+const { response } = require("express");
+
 module.exports = function(app){
 
 const db = require("better-sqlite3")("Gruppeoppgave-eksamenstreningDB.sdb");
@@ -5,7 +7,7 @@ const db = require("better-sqlite3")("Gruppeoppgave-eksamenstreningDB.sdb");
 const bcrypt = require("bcrypt");
 
 app.get("/", (req, res) => {
-    res.render("index.html")
+    res.redirect("/html/index.html")
 })
 
 app.get("/login", (req, res) => {
@@ -52,6 +54,14 @@ app.get("/admin", (req,res)=>{
         device = db.prepare(`SELECT device.*, (SELECT count(*) FROM reservastion where reservastion.device_id = device.id and reservastion.accepted=false) as unaprovedreservations, deviceType.*
         FROM device inner join deviceType on device.deviceType_id = deviceType.id;`).all();
         utstyrType = db.prepare("select * from deviceType").all();
+
+        if(users.Level==1){
+          users.elevsel=true 
+        }else if(users.Level==2){
+          users.lerersel=true
+        }else if(users.Level==3){
+          users.adminsel=true
+        }
         res.render("adminside.hbs", {
             user: users,
             device: device,
@@ -61,6 +71,15 @@ app.get("/admin", (req,res)=>{
       //res.redirect("back")
     //}
 
+});
+
+app.get("/adminDevice", (req,res)=>{
+   //if(req.session.loggedin && req.session.isAdmin){
+      deviceID = req.query.id
+      response.render("adminDevice.hbs")
+    //}else{
+      //res.redirect("back")
+    //}
 });
 
 app.post("/registrerUtstyr", (req,res)=>{
@@ -73,6 +92,16 @@ app.post("/registrerUtstyrType", (req,res)=>{
   svar=req.body
   db.prepare(`INSERT INTO deviceType (name,imgPath,beskrivelse)
   VALUES (?,?,?);`).run(svar.TypeNavn, svar.BildePath, svar.beskrivelse)
+  res.redirect("/admin")
+});
+
+app.post("/opdBrukerRettigheter", (req,res)=>{
+  svar =req.body;
+  let admin=0
+  if(svar.adgang==3){
+    admin=1
+  }
+  db.prepare(`UPDATE user SET admin = ?, Level = ? WHERE id = ?`).run(admin, svar.adgang, svar.id)
   res.redirect("/admin")
 });
 
