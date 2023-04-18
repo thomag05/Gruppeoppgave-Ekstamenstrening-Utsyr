@@ -27,3 +27,16 @@ body{
     transition: 0.7s;
     color: whitesmoke;
 }
+
+.gridlayout {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    grid-auto-rows: minmax(100px, auto);
+}
+
+.GI1 {
+    text-align: center;
+    grid-column: 2;
+    grid-row: 2;
+  }
