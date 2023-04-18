@@ -1,9 +1,8 @@
 module.exports = function(app){
 
-
-    // app.get("/", (req, res) => {
-    //     res.render("index.html")
-    // })
+app.get("/", (req, res) => {
+    res.render("index.html")
+})
 
 
 
@@ -15,7 +14,7 @@ app.post("/login", async (req, res) => {
     try {
       let login = req.body;
       let userData = db.prepare("SELECT * FROM brukere WHERE email = ?").get(login.email);
-      if(await bcrypt.compare(login.password, userData.hash)) {
+      if(await bcrypt.compare(login.password, userData.PasswordHash)) {
         req.session.loggedin = true
         req.session.brukerid = userData.id
         if(userData.admin === 1 ) {req.session.isAdmin = true}
