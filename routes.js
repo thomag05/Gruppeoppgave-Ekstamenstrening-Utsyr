@@ -5,7 +5,7 @@ const db = require("better-sqlite3")("Gruppeoppgave-eksamenstreningDB.sdb");
 const bcrypt = require("bcrypt");
 
 app.get("/", (req, res) => {
-    res.render("index.html")
+    res.redirect("./html/index.html")
 })
 
 app.get("/login", (req, res) => {
