@@ -2,7 +2,7 @@ const express = require("express");
 const session = require("express-session");
 const path = require("path");
 const hbs = require("hbs");
-const db = require("better-sqlite3")("Gruppeoppgave-eksamenstreningDB.sdb");
+const db = require("better-sqlite3")("Gruppeoppgave-eksamenstreningDB.db");
 
 const app = express();
 app.use(express.urlencoded({extended: true}));
