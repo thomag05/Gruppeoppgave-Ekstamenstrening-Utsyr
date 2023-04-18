@@ -34,9 +34,9 @@ app.post("/login", async (req, res) => {
 app.post("/addUser", async (req, res) => {
     let svar = req.body;
     console.log(req.body)
-    let hash = await bcrypt.hash(svar.password, 10)
-    db.prepare("INSERT INTO user (name, email, PasswordHash, admin) VALUES (?,?,?,?)").run(svar.name, svar.email, hash, 0)
-    res.redirect("/login")
+    // let hash = await bcrypt.hash(svar.password, 10)
+    // db.prepare("INSERT INTO user (name, email, PasswordHash, admin) VALUES (?,?,?,?)").run(svar.name, svar.email, hash, 0)
+    // res.redirect("/login")
     
 })
 
