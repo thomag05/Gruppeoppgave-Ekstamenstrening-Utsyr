@@ -5,7 +5,7 @@ const db = require("better-sqlite3")("Gruppeoppgave-eksamenstreningDB.sdb");
 const bcrypt = require("bcrypt");
 
 app.get("/", (req, res) => {
-    res.render("index.html")
+    res.redirect("./html/index.html")
 })
 
 app.get("/login", (req, res) => {
@@ -48,7 +48,7 @@ app.post("/logout", (req, res) => {
 
 app.get("/admin", (req,res)=>{
     //if(req.session.loggedin && req.session.isAdmin){
-        users = db.prepare("select * from user").all();
+        users = db.prepare("SELECT * from user").all();
         device = db.prepare(`SELECT device.*, (SELECT count(*) FROM reservastion where reservastion.device_id = device.id and reservastion.accepted=false) as unaprovedreservations, deviceType.*
         FROM device inner join deviceType on device.deviceType_id = deviceType.id;`).all();
         utstyrType = db.prepare("select * from deviceType").all();
