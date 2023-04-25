@@ -18,7 +18,20 @@ app.use(session({
     saveUninitialized: false
 }))
 
-require('./routes')(app);
+const config = {
+    user: process.env.DB_user, // better stored in an app setting such as process.env.DB_USER
+    password: process.env.DB_PASSWORD, // better stored in an app setting such as process.env.DB_PASSWORD
+    server: process.env.DB_server, // better stored in an app setting such as process.env.DB_SERVER
+    port: process.env.DB_PORT, // optional, defaults to 1433, better stored in an app setting such as process.env.DB_PORT
+    database: process.env.DB_NAME, // better stored in an app setting such as process.env.DB_NAME
+    authentication: {
+        type: 'default'
+    },
+    options: {
+        encrypt: true
+    }
+}
+
 
 app.listen("3000", () => {
     console.log("Server listening at http://localhost:3000")
