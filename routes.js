@@ -76,7 +76,21 @@ app.get("/admin", (req,res)=>{
 app.get("/adminDevice", (req,res)=>{
    //if(req.session.loggedin && req.session.isAdmin){
       deviceID = req.query.id
-      response.render("adminDevice.hbs")
+      let Device = db.prepare(`select * from device where id = ?`).get(deviceID);
+      let Type = db.prepare(`select * from deviceType where id = ?`).get(deviceID);
+      let resvastion =  db.prepare(`select reservastion.*, user.name from reservastion 
+      inner join user on reservastion.user_id = user.id
+      where device_id = ? and accepted = ?`).all(deviceID, 1);
+      let resrvastionReq = db.prepare(`select reservastion.*, user.name from reservastion 
+      inner join user on reservastion.user_id = user.id
+      where device_id = ? and accepted = ?`).all(deviceID, 0);
+
+      res.render("adminDevice.hbs", {
+        Device: Device,
+        Type: Type,
+        resvastion: resvastion,
+        resrvastionReq: resrvastionReq
+      })
     //}else{
       //res.redirect("back")
     //}
