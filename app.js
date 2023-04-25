@@ -17,6 +17,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }))
+require('./routes')(app);
 
 const config = {
     user: process.env.DB_user, // better stored in an app setting such as process.env.DB_USER
