@@ -11,15 +11,14 @@ const hbspath = path.join(__dirname, "views/pages")
 app.use(express.static(rootpath));
 app.set("view engine", hbs);
 app.set("views", hbspath)
-
-require('./routes')(app);
 require('dotenv').config();
-
 app.use(session({
-     secret: process.env.secret,
+    secret: process.env.secret,
     resave: false,
     saveUninitialized: false
 }))
+
+require('./routes')(app);
 
 app.listen("3000", () => {
     console.log("Server listening at http://localhost:3000")
