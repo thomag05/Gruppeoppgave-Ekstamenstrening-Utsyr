@@ -1,6 +1,6 @@
 module.exports = function(app){
 
-const db = require("better-sqlite3")("Gruppeoppgave-eksamenstreningDB.sdb");
+const db = require("better-sqlite3")("Gruppeoppgave-eksamenstreningDB.db", {verbose: console.log});
 
 const bcrypt = require("bcrypt");
 
@@ -19,17 +19,19 @@ app.get("/registrer", (req ,res) => {
 app.post("/login", async (req, res) => {
     try {
       let login = req.body;
-      let userData = db.prepare("SELECT * FROM brukere WHERE email = ?").get(login.email);
+      let userData = db.prepare("SELECT * FROM user WHERE email = ?").get(login.email);
       if(await bcrypt.compare(login.password, userData.PasswordHash)) {
         req.session.loggedin = true
         req.session.brukerid = userData.id
         if(userData.admin === 1 ) {req.session.isAdmin = true}
-        res.redirect("/")
+        res.redirect("/admin")
       } else {
-        res.redirect("back")
+        res.redirect("/") // legg til elevside her
       }
     } catch (err) {
-        res.send('<html><body><script>alert("Du har tastet inn feil brukernavn eller passord");window.location.href="/";</script></body></html>');
+        console.log(err)
+        res.send('<html><body><script>alert("Du har tastet inn feil brukernavn eller passord");window.location.href="/login";</script></body></html>');
+   
     }
   });
 app.post("/addUser", async (req, res) => {

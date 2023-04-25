@@ -11,15 +11,13 @@ const hbspath = path.join(__dirname, "views/pages")
 app.use(express.static(rootpath));
 app.set("view engine", hbs);
 app.set("views", hbspath)
-
-require('./routes')(app);
 require('dotenv').config();
-
 app.use(session({
-     secret: process.env.secret,
+    secret: process.env.secret,
     resave: false,
     saveUninitialized: false
 }))
+require('./routes')(app);
 
 const config = {
     user: process.env.DB_user, // better stored in an app setting such as process.env.DB_USER
