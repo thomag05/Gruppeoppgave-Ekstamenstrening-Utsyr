@@ -21,8 +21,9 @@ app.get("/brukerside", (req, res) => {
 })
 
 app.get("/minside", (req, res) => {
-  // let userdata db.prepare("SELECT Æ")
-  res.render("minside.hbs")
+  let userdata = db.prepare("SELECT * FROM user WHERE id = ?").get(req.session.brukerid)
+
+  res.render("minside.hbs", userdata)
 })
     
 app.post("/login", async (req, res) => {
