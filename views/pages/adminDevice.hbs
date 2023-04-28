@@ -8,6 +8,23 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
+    <div class="gridlayout">
+    <a href="/admin">back</a>
+    <h1>{{Device.Name}}</h1>
+    <h4>{{Type.name}}</h4>
+    <img src="{{Type.imagePath}}" alt="">
     
+    {{#each resvastion}}
+       <h3>{{this.name}}</h3>
+        <p>{{this.startTime}} - {{this.endTime}}</p>
+    {{/each}}
+
+
+    {{#each resrvastionReq}}
+        <h3>{{this.name}}</h3>
+        <p>{{this.startTime}} - {{this.endTime}}</p>
+        <button>Approve</button>
+    {{/each}}
+    </div>
 </body>
 </html>
