@@ -19,13 +19,20 @@ app.get("/registrer", (req ,res) => {
 })
 
 app.get("/brukerside", (req, res) => {
-  res.render("brukerside.hbs")
+  if (req.session.loggedin === true) {
+  res.render("brukerside.hbs")}
+  else {
+    res.redirect("/login")
+  }
 })
 
 app.get("/minside", (req, res) => {
+  if (req.session.loggedin === true) {
   let userdata = db.prepare("SELECT * FROM user WHERE id = ?").get(req.session.brukerid)
-
-  res.render("minside.hbs", userdata)
+  res.render("minside.hbs", userdata)}
+  else {
+    res.redirect("login")
+  }
 })
     
 app.post("/login", async (req, res) => {
@@ -35,10 +42,10 @@ app.post("/login", async (req, res) => {
       if(await bcrypt.compare(login.password, userData.PasswordHash)) {
         req.session.loggedin = true
         req.session.brukerid = userData.id
-        if(userData.admin === 1 ) {req.session.isAdmin = true}
-        res.redirect("/admin")
-      } else {
-        res.redirect("/") // legg til elevside her
+            if(userData.admin === 1 ) {req.session.isAdmin = true}
+            res.redirect("/admin")
+          } else {
+            res.redirect("/brukerside")
       }
     } catch (err) {
         console.log(err)
@@ -54,8 +61,14 @@ app.post("/addUser", async (req, res) => {
     res.redirect("/login")
     
 })
+app.post("/removeUser", (req, res) => {
+      db.prepare("DELETE FROM user WHERE id = ?").run(req.session.brukerid)
+      req.session.destroy();
+      res.send('<html><body><script>alert("Brukeren din har blitt slettet!");window.location.href="/";</script></body></html>');
+})
 
 app.post("/logout", (req, res) => {
+    req.sesssion.loggedin = false;
     req.session.destroy();
     res.redirect("back")
 })
