@@ -11,7 +11,7 @@ const hbspath = path.join(__dirname, "views/pages")
 app.use(express.static(rootpath));
 app.set("view engine", hbs);
 app.set("views", hbspath)
-require('dotenv').config();
+const dotenv = require("dotenv").config();
 app.use(session({
     secret: process.env.secret,
     resave: false,

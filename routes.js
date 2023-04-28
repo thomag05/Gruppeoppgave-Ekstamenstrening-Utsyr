@@ -1,6 +1,51 @@
+const sql = require("mssql");
+const dotenv = require("dotenv").config();
 const { response } = require("express");
 
 module.exports = function(app){
+
+  const config = {
+    user: process.env.DB_user, // better stored in an app setting such as process.env.DB_USER
+    password: process.env.DB_PASSWORD, // better stored in an app setting such as process.env.DB_PASSWORD
+    server: process.env.DB_server, // better stored in an app setting such as process.env.DB_SERVER
+    port: 1433, // optional, defaults to 1433, better stored in an app setting such as process.env.DB_PORT
+    database: process.env.DB_NAME, // better stored in an app setting such as process.env.DB_NAME
+    authentication: {
+        type: 'default'
+    },
+    options: {
+            encrypt: true
+    }
+  }
+
+  async function connectAndQueryLogin(email) {
+    try {
+        var poolConnection = await sql.connect(config);
+  
+        console.log("Reading rows from the Table...");
+        var resultSet = await poolConnection.request().query(`SELECT * FROM [user] WHERE email = '` +  email + `'`);
+  
+        console.log(`${resultSet.recordset.length} rows returned.`);
+  
+        // output column headers
+        var columns = "";
+        for (var column in resultSet.recordset.columns) {
+            columns += column + ", ";
+        }
+        console.log("%s\t", columns.substring(0, columns.length - 2));
+  
+        // ouput row contents from default record set
+        resultSet.recordset.forEach(row => {
+            console.log("%s\t%s", row.CategoryName, row.ProductName);
+        });
+  
+        // close connection only when we're certain application is finished
+        poolConnection.close();
+    } catch (err) {
+        console.error(err.message);
+    }
+  }
+
 
 const db = require("better-sqlite3")("Gruppeoppgave-eksamenstreningDB.db", {verbose: console.log});
 
@@ -21,21 +66,23 @@ app.get("/registrer", (req ,res) => {
 app.post("/login", async (req, res) => {
     try {
       let login = req.body;
-      let userData = db.prepare("SELECT * FROM user WHERE email = ?").get(login.email);
-      if(await bcrypt.compare(login.password, userData.PasswordHash)) {
-        req.session.loggedin = true
-        req.session.brukerid = userData.id
-        if(userData.admin === 1 ) {req.session.isAdmin = true}
-        res.redirect("/admin")
-      } else {
+      connectAndQueryLogin(login.email)
+      // let userData = db.prepare("SELECT * FROM user WHERE email = ?").get(login.email);
+      // if(await bcrypt.compare(login.password, userData.PasswordHash)) {
+      //   req.session.loggedin = true
+      //   req.session.brukerid = userData.id
+      //   if(userData.admin === 1 ) {req.session.isAdmin = true
+      //   res.redirect("/admin")
+      // } else {
         res.redirect("/") // legg til elevside her
-      }
-    } catch (err) {
-        console.log(err)
-        res.send('<html><body><script>alert("Du har tastet inn feil brukernavn eller passord");window.location.href="/login";</script></body></html>');
+      //}
+     } catch (err) {
+         console.log(err)
+         res.send('<html><body><script>alert("Du har tastet inn feil brukernavn eller passord");window.location.href="/login";</script></body></html>');
    
-    }
-  });
+     };
+});
+
 app.post("/addUser", async (req, res) => {
     let svar = req.body;
     console.log(req.body)
