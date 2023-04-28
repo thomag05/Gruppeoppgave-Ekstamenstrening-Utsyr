@@ -15,6 +15,15 @@ app.get("/login", (req, res) => {
 app.get("/registrer", (req ,res) => {
     res.render("registrerBruker.hbs")
 })
+
+app.get("/brukerside", (req, res) => {
+  res.render("brukerside.hbs")
+})
+
+app.get("/minside", (req, res) => {
+  // let userdata db.prepare("SELECT Æ")
+  res.render("minside.hbs")
+})
     
 app.post("/login", async (req, res) => {
     try {
@@ -49,7 +58,7 @@ app.post("/logout", (req, res) => {
 })
 
 app.get("/admin", (req,res)=>{
-    //if(req.session.loggedin && req.session.isAdmin){
+    if(req.session.loggedin && req.session.isAdmin){
         users = db.prepare("SELECT * from user").all();
         device = db.prepare(`SELECT device.*, (SELECT count(*) FROM reservastion where reservastion.device_id = device.id and reservastion.accepted=false) as unaprovedreservations, deviceType.*
         FROM device inner join deviceType on device.deviceType_id = deviceType.id;`).all();
@@ -59,9 +68,9 @@ app.get("/admin", (req,res)=>{
             device: device,
             utstyrType: utstyrType
         });
-    //}else{
-      //res.redirect("back")
-    //}
+    }else{
+      res.redirect("back")
+    }
 
 });
 
