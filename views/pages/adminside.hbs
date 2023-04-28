@@ -8,6 +8,7 @@
     <title>Admin</title>
 </head>
 <body>
+        <div class="gridlayout">
     <form id="registrerUtstyr" method="post" action="/registrerUtstyr" class="GL2">
         <h2>Registrer nytt utstyr</h2>
         <label for="utstyrNavn">Navn</label><br>
@@ -37,22 +38,28 @@
 
     {{#each user}}
         <div>
-            <h1>{{this.username}}</h1>
+            <h2>{{this.name}}</h2>
+             <h2>{{this.email}}</h2>
+            <form method="post" action="/opdBrukerRettigheter">
             <h4>Tillgengsnivå</h4>
-            <select>
-                <option value="1">Elev</option>
-                <option value="2">Lærer</option>
-                <option value="3">Administrator</option>
+            <input type="hidden" value="{{this.id}}" name="id">
+            <select name="adgang" id="selectAdgang{{this.id}}">
+                <option value="1" {{#if this.elevsel}}selected="selected"{{/if}}>Elev</option>
+                <option value="2" {{#if this.lerersel}}selected="selected"{{/if}}>Lærer</option>
+                <option value="3" {{#if this.adminsel}}selected="selected"{{/if}}>Administrator</option>
             </select>
+            <input type="submit" value="Oppdater">
+            </form>
         </div>
     {{/each}}
 
     {{#each device}}
-        <div>
+        <a href="/adminDevice?id={{this.id}}"><div>
             <h1>{{this.Name}}</h1>
             <h3>{{this.name}}</h3>
             <p>usvarte forespørsler: <div>{{this.unaprovedreservations}}</div></p>
-        </div>
+        </div></a>
     {{/each}}
+    </div>
 </body>
 </html>

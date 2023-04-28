@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../css/styles.css" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+    <div class="gridlayout">
+    <div class="GM2" style="text-align: left;">
+    
+    <form method="post" action="nyBruker">
+        <label for="navn">Navn</label><br>
+        <input type="text" name="navn" placeholder="Navn"><br>
+        <br>
+        <label for="role">Role (dersom du vil ha høyere role en elev må dette godkjennes av en administrator)</label><br>
+        <select name="role">
+            <option value="1">Elev</option>
+            <option value="2">Lærer</option>
+            <option value="3">Admin</option>
+        </select><br>
+        <br>
+        <label for="passord">Passord</label>
+        <input type="password" name="passord" placeholder="Passord">
+        <br>
+        <label for="bekreftpassord">bekreft passord</label>
+        <input type="password" name="bekreftpassord" placeholder="bekreft Passord">
+        <br>
+        <br>
+        <button class="btn">Log inn</button> 
+    </form> 
+</div>
+</div>
+</body>
+</html>
