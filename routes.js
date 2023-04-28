@@ -1,3 +1,5 @@
+const { response } = require("express");
+
 module.exports = function(app){
 
 const db = require("better-sqlite3")("Gruppeoppgave-eksamenstreningDB.db", {verbose: console.log});
@@ -54,6 +56,14 @@ app.get("/admin", (req,res)=>{
         device = db.prepare(`SELECT device.*, (SELECT count(*) FROM reservastion where reservastion.device_id = device.id and reservastion.accepted=false) as unaprovedreservations, deviceType.*
         FROM device inner join deviceType on device.deviceType_id = deviceType.id;`).all();
         utstyrType = db.prepare("select * from deviceType").all();
+
+        if(users.Level==1){
+          users.elevsel=true 
+        }else if(users.Level==2){
+          users.lerersel=true
+        }else if(users.Level==3){
+          users.adminsel=true
+        }
         res.render("adminside.hbs", {
             user: users,
             device: device,
@@ -63,6 +73,29 @@ app.get("/admin", (req,res)=>{
       //res.redirect("back")
     //}
 
+});
+
+app.get("/adminDevice", (req,res)=>{
+   //if(req.session.loggedin && req.session.isAdmin){
+      deviceID = req.query.id
+      let Device = db.prepare(`select * from device where id = ?`).get(deviceID);
+      let Type = db.prepare(`select * from deviceType where id = ?`).get(deviceID);
+      let resvastion =  db.prepare(`select reservastion.*, user.name from reservastion 
+      inner join user on reservastion.user_id = user.id
+      where device_id = ? and accepted = ?`).all(deviceID, 1);
+      let resrvastionReq = db.prepare(`select reservastion.*, user.name from reservastion 
+      inner join user on reservastion.user_id = user.id
+      where device_id = ? and accepted = ?`).all(deviceID, 0);
+
+      res.render("adminDevice.hbs", {
+        Device: Device,
+        Type: Type,
+        resvastion: resvastion,
+        resrvastionReq: resrvastionReq
+      })
+    //}else{
+      //res.redirect("back")
+    //}
 });
 
 app.post("/registrerUtstyr", (req,res)=>{
@@ -75,6 +108,16 @@ app.post("/registrerUtstyrType", (req,res)=>{
   svar=req.body
   db.prepare(`INSERT INTO deviceType (name,imgPath,beskrivelse)
   VALUES (?,?,?);`).run(svar.TypeNavn, svar.BildePath, svar.beskrivelse)
+  res.redirect("/admin")
+});
+
+app.post("/opdBrukerRettigheter", (req,res)=>{
+  svar =req.body;
+  let admin=0
+  if(svar.adgang==3){
+    admin=1
+  }
+  db.prepare(`UPDATE user SET admin = ?, Level = ? WHERE id = ?`).run(admin, svar.adgang, svar.id)
   res.redirect("/admin")
 });
 
