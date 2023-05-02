@@ -121,4 +121,12 @@ app.post("/opdBrukerRettigheter", (req,res)=>{
   res.redirect("/admin")
 });
 
+app.get("/ApproveReservastion", (req,res)=>{
+  //if(er en admin eller e lærer){
+
+  db.prepare(`UPDATE reservastion SET accepted = 1 WHERE id = ?`).run(req.query.id);
+  res.redirect("back")
+  //}
+});
+
 }

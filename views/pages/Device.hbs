@@ -17,17 +17,10 @@
         
         <h2>Future reservations:</h2>
         {{#each resvastion}}
-        <h3>{{this.name}}</h3>
             <p>{{this.startTime}} - {{this.endTime}}</p><br><br>
         {{/each}}
         <br><br>
-
-        <h2>Requests:</h2>
-        {{#each resrvastionReq}}
-            <h3>{{this.name}}</h3>
-            <p>{{this.startTime}} - {{this.endTime}}</p>
-            <a href="/ApproveReservastion?id={{this.id}}"><button>Approve</button></a><br><br>
-        {{/each}}
+        <button>Request new reservation</button>
     <div>
     </div>
 </body>
