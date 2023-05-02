@@ -42,10 +42,11 @@ app.post("/login", async (req, res) => {
       if(await bcrypt.compare(login.password, userData.PasswordHash)) {
         req.session.loggedin = true
         req.session.brukerid = userData.id
-            if(userData.admin === 1 ) {req.session.isAdmin = true}
-            res.redirect("/admin")
-          } else {
-            res.redirect("/brukerside")
+        console.log(userData.id)
+            if(userData.admin === 1 ) {req.session.isAdmin = true
+            res.redirect("/admin")}
+           else {
+            res.redirect("/brukerside")}
       }
     } catch (err) {
         console.log(err)
