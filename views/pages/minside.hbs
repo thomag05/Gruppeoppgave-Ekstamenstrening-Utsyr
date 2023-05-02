@@ -10,5 +10,9 @@
 <body>
     <h1 style="text-align: center;">Min side</h1>
     <p style="text-align: center;">Innlogget som {{this.name}}</p>
+    <div style="text-align: center; display: block; margin: 0 auto;">
+    <form action="/logout" method="POST"><button style="margin-bottom:5px;">Logg ut</button></form>
+    <form action="/removeUser" method="POST"><button>Slett din bruker</button></form>
+    </div>
 </body>
 </html>

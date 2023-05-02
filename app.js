@@ -33,6 +33,11 @@ const config = {
     }
 }
 
+// Sender 404 feil tilbake til index
+app.use(function(req, res, next) {
+    res.status(404).redirect("/");
+});
+
 
 app.listen("80", () => {
     console.log("Server listening at http://localhost:80")
