@@ -7,7 +7,7 @@ const db = require("better-sqlite3")("Gruppeoppgave-eksamenstreningDB.db");
 const app = express();
 app.use(express.urlencoded({extended: true}));
 const rootpath = path.join(__dirname, "public")
-const hbspath = path.join(__dirname, "views/pages")
+const hbspath = path.join(__dirname , "views/pages")
 app.use(express.static(rootpath));
 app.set("view engine", hbs);
 app.set("views", hbspath)
@@ -33,7 +33,12 @@ const config = {
     }
 }
 
+// Sender 404 feil tilbake til index
+app.use(function(req, res, next) {
+    res.status(404).redirect("/");
+});
 
-app.listen("3000", () => {
-    console.log("Server listening at http://localhost:3000")
+
+app.listen("80", () => {
+    console.log("Server listening at http://localhost:80")
 })

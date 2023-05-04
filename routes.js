@@ -17,6 +17,23 @@ app.get("/login", (req, res) => {
 app.get("/registrer", (req ,res) => {
     res.render("registrerBruker.hbs")
 })
+
+app.get("/brukerside", (req, res) => {
+  if (req.session.loggedin === true) {
+  res.render("brukerside.hbs")}
+  else {
+    res.redirect("/login")
+  }
+})
+
+app.get("/minside", (req, res) => {
+  if (req.session.loggedin === true) {
+  let userdata = db.prepare("SELECT * FROM user WHERE id = ?").get(req.session.brukerid)
+  res.render("minside.hbs", userdata)}
+  else {
+    res.redirect("login")
+  }
+})
     
 app.post("/login", async (req, res) => {
     try {
@@ -25,10 +42,11 @@ app.post("/login", async (req, res) => {
       if(await bcrypt.compare(login.password, userData.PasswordHash)) {
         req.session.loggedin = true
         req.session.brukerid = userData.id
-        if(userData.admin === 1 ) {req.session.isAdmin = true}
-        res.redirect("/admin")
-      } else {
-        res.redirect("/") // legg til elevside her
+        console.log(userData.id)
+            if(userData.admin === 1 ) {req.session.isAdmin = true
+            res.redirect("/admin")}
+           else {
+            res.redirect("/brukerside")}
       }
     } catch (err) {
         console.log(err)
@@ -44,14 +62,20 @@ app.post("/addUser", async (req, res) => {
     res.redirect("/login")
     
 })
+app.post("/removeUser", (req, res) => {
+      db.prepare("DELETE FROM user WHERE id = ?").run(req.session.brukerid)
+      req.session.destroy();
+      res.send('<html><body><script>alert("Brukeren din har blitt slettet!");window.location.href="/";</script></body></html>');
+})
 
 app.post("/logout", (req, res) => {
+    req.sesssion.loggedin = false;
     req.session.destroy();
     res.redirect("back")
 })
 
 app.get("/admin", (req,res)=>{
-    //if(req.session.loggedin && req.session.isAdmin){
+    if(req.session.loggedin && req.session.isAdmin){
         users = db.prepare("SELECT * from user").all();
         device = db.prepare(`SELECT device.*, (SELECT count(*) FROM reservastion where reservastion.device_id = device.id and reservastion.accepted=false) as unaprovedreservations, deviceType.*
         FROM device inner join deviceType on device.deviceType_id = deviceType.id;`).all();
@@ -69,9 +93,9 @@ app.get("/admin", (req,res)=>{
             device: device,
             utstyrType: utstyrType
         });
-    //}else{
-      //res.redirect("back")
-    //}
+    }else{
+      res.redirect("back")
+    }
 
 });
 
