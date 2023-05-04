@@ -99,7 +99,7 @@ app.get("/admin", (req,res)=>{
 
 });
 
-app.get("/adminDevice", (req,res)=>{
+app.get("/Device", (req,res)=>{
    //if(req.session.loggedin && req.session.isAdmin){
       deviceID = req.query.id
       let Device = db.prepare(`select * from device where id = ?`).get(deviceID);
@@ -111,16 +111,36 @@ app.get("/adminDevice", (req,res)=>{
       inner join user on reservastion.user_id = user.id
       where device_id = ? and accepted = ?`).all(deviceID, 0);
 
-      res.render("adminDevice.hbs", {
-        Device: Device,
-        Type: Type,
-        resvastion: resvastion,
-        resrvastionReq: resrvastionReq
-      })
+      if(req.session.isAdmin==true /*|| req.session.isLerer==true*/){
+        res.render("adminDevice.hbs", {
+          Device: Device,
+          Type: Type,
+          resvastion: resvastion,
+          resrvastionReq: resrvastionReq
+        })
+          }else {
+            res.render("Device.hbs", {
+              Device: Device,
+              Type: Type,
+              resvastion: resvastion
+            });
+        }
     //}else{
       //res.redirect("back")
     //}
 });
+
+app.get("/hovedside", (req,res)=>{
+  if(req.session.loggedin){
+
+    console.log(devicepage)
+    device = db.prepare(`SELECT device.*, deviceType.*
+    FROM device inner join deviceType on device.deviceType_id = deviceType.id;`).all();
+    res.render("Hovedside.hbs", {
+      device: device
+    });
+  }
+})
 
 app.post("/registrerUtstyr", (req,res)=>{
   svar=req.body
@@ -143,6 +163,14 @@ app.post("/opdBrukerRettigheter", (req,res)=>{
   }
   db.prepare(`UPDATE user SET admin = ?, Level = ? WHERE id = ?`).run(admin, svar.adgang, svar.id)
   res.redirect("/admin")
+});
+
+app.get("/ApproveReservastion", (req,res)=>{
+  //if(er en admin eller e lærer){
+
+  db.prepare(`UPDATE reservastion SET accepted = 1 WHERE id = ?`).run(req.query.id);
+  res.redirect("back")
+  //}
 });
 
 }
