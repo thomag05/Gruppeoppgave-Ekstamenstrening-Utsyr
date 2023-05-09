@@ -6,48 +6,6 @@ Celestial blue#449DD1
 Sky blue #78C0E0
 */
 
-
-
-body{
-    background-color: #0E0E52;
-    color: whitesmoke;
-    font-family: 'Helvetica Neue', sans-serif;
-    font-size: 16px;
-    line-height: 1.5;
-
-}
-h1 {
-    text-align: center;
-    margin-top: 50px;
-    font-size: 32px;
-    font-weight: 400;
-  }
-
-  form {
-    margin: 50px auto;
-    max-width: 400px;
-  }
-
-  label {
-    display: block;
-    margin-bottom: 10px;
-    font-size: 18px;
-  }
-  
-.btn{
-    background-color: #192BC2;
-    color: whitesmoke;
-    border:none; 
-    border-radius: 10px; 
-    padding: 7px;
-
-}
-.btn:hover {
-    background-color: #449DD1;
-    transition: 0.7s;
-    color: whitesmoke;
-}
-
 .gridlayout {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -74,12 +32,63 @@ h1 {
     /*grid-row: 2;*/
 }
 
-table {
-    border-collapse: collapse;
-    border: 1px solid white;
-    
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
-td, th {
-    border: 1px solid white;
-    padding: 5px;
+
+body {
+  background-color: #1E1E1E;
+  color: #FFF;
+  font-family: 'Helvetica Neue', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 32px;
+  font-weight: 400;
+}
+
+form {
+  margin: 50px auto;
+  max-width: 400px;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 20px;
+  border: none;
+  background-color: #2E2E2E;
+  color: #FFF;
+}
+
+button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  font-size: 18px;
+  background-color: #4CAF50;
+  color: #FFF;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #3E8E41;
 }
