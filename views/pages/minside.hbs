@@ -8,11 +8,27 @@
     <title>Minside</title>
 </head>
 <body>
-    <h1 style="text-align: center;">Min side</h1>
-    <p style="text-align: center;">Innlogget som {{this.name}}</p>
-    <div style="text-align: center; display: block; margin: 0 auto;">
-    <form action="/logout" method="POST"><button style="margin-bottom:5px;">Logg ut</button></form>
-    <form action="/removeUser" method="POST"><button>Slett din bruker</button></form>
+    <div style="text-align:center;">
+    <h1>Min side</h1>
+    <p>Innlogget som {{#with userdata}}{{this.name}}{{/with}}</p><br><br>
+    <p>Utlånsforespørsel</p>
+    <form style="margin: 0 auto;" action="/reservation" method="POST">
+    <label for="device">Device</label>
+    <select name="id">
+        {{#with device}}
+        <option value="{{this.id}}">{{this.Name}}</option>
+        {{/with}}
+    </select>
+    <label for="startdato">Utlånsdato</label>
+    <input type="date" name="startdato">
+    <label for="sluttdato">Innleveringsdato</label>
+    <input type="date" name="sluttdato"><br><br>
+    <button type="submit">Send forespørsel</button>
+
+    </form>
+    
+    <form style="margin: 0 auto; margin-top: 400px;" action="/logout" method="POST"><button style="margin-bottom:5px;">Logg ut</button></form>
+    <form style="margin: 0 auto;" action="/removeUser" method="POST"><button>Slett din bruker</button></form>
     </div>
 </body>
 </html>

@@ -29,7 +29,10 @@ app.get("/brukerside", (req, res) => {
 app.get("/minside", (req, res) => {
   if (req.session.loggedin === true) {
   let userdata = db.prepare("SELECT * FROM user WHERE id = ?").get(req.session.brukerid)
-  res.render("minside.hbs", userdata)}
+  let device = db.prepare("SELECT * FROM device").get()
+  let objekt = {userdata: userdata, device: device}
+  console.log(objekt)
+  res.render("minside.hbs", objekt)}
   else {
     res.redirect("login")
   }
@@ -45,8 +48,9 @@ app.post("/login", async (req, res) => {
         console.log(userData.id)
             if(userData.admin === 1 ) {req.session.isAdmin = true
             res.redirect("/admin")}
+            
            else {
-            res.redirect("/brukerside")}
+            res.redirect("/minside")}
       }
     } catch (err) {
         console.log(err)
@@ -69,15 +73,21 @@ app.post("/removeUser", (req, res) => {
 })
 
 app.post("/logout", (req, res) => {
-    req.sesssion.loggedin = false;
     req.session.destroy();
     res.redirect("back")
 })
 
+app.post("/reservation", (req, res) => {
+  let svar = req.body;
+  db.prepare("INSERT INTO resvastion (user_id, device_id, startTime, endTime) VALUES (?,?,?,?)").run(req.session.brukerid, svar.id, svar.startdato, svar.sluttdato)
+  res.send('<html><body><script>alert("Din forspørsel har blitt sendt til godkjenning");window.location.href="/minside";</script></body></html>');
+})
+
+
 app.get("/admin", (req,res)=>{
     if(req.session.loggedin && req.session.isAdmin){
         users = db.prepare("SELECT * from user").all();
-        device = db.prepare(`SELECT device.*, (SELECT count(*) FROM reservastion where reservastion.device_id = device.id and reservastion.accepted=false) as unaprovedreservations, deviceType.*
+        device = db.prepare(`SELECT device.*, (SELECT count(*) FROM resvastion where resvastion.device_id = device.id and resvastion.accepted=false) as unaprovedreservations, deviceType.*
         FROM device inner join deviceType on device.deviceType_id = deviceType.id;`).all();
         utstyrType = db.prepare("select * from deviceType").all();
 
@@ -104,11 +114,11 @@ app.get("/adminDevice", (req,res)=>{
       deviceID = req.query.id
       let Device = db.prepare(`select * from device where id = ?`).get(deviceID);
       let Type = db.prepare(`select * from deviceType where id = ?`).get(deviceID);
-      let resvastion =  db.prepare(`select reservastion.*, user.name from reservastion 
-      inner join user on reservastion.user_id = user.id
+      let resvastion =  db.prepare(`select resvastion.*, user.name from resvastion 
+      inner join user on resvastion.user_id = user.id
       where device_id = ? and accepted = ?`).all(deviceID, 1);
-      let resrvastionReq = db.prepare(`select reservastion.*, user.name from reservastion 
-      inner join user on reservastion.user_id = user.id
+      let resrvastionReq = db.prepare(`select resvastion.*, user.name from resvastion 
+      inner join user on resvastion.user_id = user.id
       where device_id = ? and accepted = ?`).all(deviceID, 0);
 
       res.render("adminDevice.hbs", {
